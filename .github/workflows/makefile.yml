@@ -16,7 +16,12 @@ jobs:
     
     - name: provision-with-micromamba
       uses: mamba-org/provision-with-micromamba@v15
+      with:
+          environment-file: environment.yaml
+          environment-name: env
+          extra-specs: |
+            python=3.10
 
 
-    - name: Run check
-      run: make check
+    - name: Run build
+      run: make build
