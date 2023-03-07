@@ -44,7 +44,7 @@ clean-env:
 
 
 test: $(if $(CI),,$(MAKE) build)
-	$(CONDA_ACTIVATE) && $(PYTHONPATH) pytest -v 
+	$(CONDA_ACTIVATE) && $(PYTHONPATH) pytest tests -v 
 
 pre-commit: $(if $(CI),,$(MAKE) build)
 	$(CONDA_ACTIVATE) && $(PYTHONPATH) pre-commit run --all-files
