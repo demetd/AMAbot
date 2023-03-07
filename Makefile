@@ -1,7 +1,14 @@
-SHELL := /bin/bash
+SHELL=/bin/bash
 
-CONDA_EXE := $(shell which mamba)
-CONDA_PATH := $(shell dirname $(dir $(CONDA_EXE)))
+# Set MAMBA_EXE to either the environment variable MAMBA_EXE or the path to the mamba executable
+MAMBA_EXE := $(or $(MAMBA_EXE),$(shell which mamba))
+ifeq ($(MAMBA_EXE),)
+	CONDA_PATH := $(HOME)/miniconda3
+	MAMBA_EXE := $(CONDA_PATH)/bin/conda
+else
+	CONDA_PATH := $(shell dirname $(dir $(MAMBA_EXE)))
+endif
+
 CONDA_ENV_PATH := ./env
 CONDA_ACTIVATE := source $(CONDA_PATH)/bin/activate $(CONDA_ENV_PATH)
 CONDA_DEACTIVATE := source $(CONDA_PATH)/bin/deactivate $(CONDA_ENV_PATH)
@@ -18,10 +25,10 @@ build: $(CONDA_ENV_PATH)/bin/activate
 $(CONDA_ENV_PATH)/bin/activate: environment.yml
 	@if [ -d "$(CONDA_ENV_PATH)" ]; then \
 		echo "Updating Conda environment"; \
-		$(CONDA_EXE) env update --quiet  --prefix $(CONDA_ENV_PATH) --file environment.yml; \
+		$(MAMBA_EXE) env update --quiet  --prefix $(CONDA_ENV_PATH) --file environment.yml; \
 	else \
 		echo "Creating Conda environment"; \
-		$(CONDA_EXE) env create --prefix $(CONDA_ENV_PATH) --file environment.yml; \
+		$(MAMBA_EXE) env create --prefix $(CONDA_ENV_PATH) --file environment.yml; \
 	fi
 
 # Remove the Conda environment
@@ -30,16 +37,16 @@ clean-env:
 		echo "Deactivating $(CONDA_ENV_PATH) environment"; \
 		$(CONDA_ACTIVATE) && conda deactivate; \
 		echo "Removing $(CONDA_ENV_PATH) environment"; \
-		$(CONDA_EXE) env remove --prefix $(CONDA_ENV_PATH); \
+		$(MAMBA_EXE) env remove --prefix $(CONDA_ENV_PATH); \
 	else \
 		echo "$(CONDA_ENV_PATH) environment not found"; \
 	fi
 
 
-test: build
-	$(CONDA_ACTIVATE) && $(PYTHONPATH) pytest -v 
+test: $(if $(CI),,$(MAKE) build)
+	$(CONDA_ACTIVATE) && $(PYTHONPATH) pytest tests -v 
 
-pre-commit: build
+pre-commit: $(if $(CI),,$(MAKE) build)
 	$(CONDA_ACTIVATE) && $(PYTHONPATH) pre-commit run --all-files
 
 check: test pre-commit
