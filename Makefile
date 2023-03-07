@@ -8,9 +8,10 @@ ifeq ($(MAMBA_EXE),)
 else
 	CONDA_PATH := $(shell dirname $(dir $(MAMBA_EXE)))
 endif
+/usr/share/miniconda/bin/activate
 
 CONDA_ENV_PATH := ./env
-CONDA_ACTIVATE := $(if $(CI),conda activate env,source $(CONDA_PATH)/bin/activate $(CONDA_ENV_PATH))
+CONDA_ACTIVATE := source $(CONDA_PATH)/bin/activate $(CONDA_ENV_PATH)
 CONDA_DEACTIVATE := source $(CONDA_PATH)/bin/deactivate $(CONDA_ENV_PATH)
 PYTHONPATH := PYTHONPATH=./:$$PYTHONPATH
 
