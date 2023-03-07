@@ -8,6 +8,9 @@ on:
 
 jobs:
   build:
+    defaults:
+      run:
+        shell: bash -el {0}
     name: build and test
     runs-on: ubuntu-latest
     steps:
@@ -20,6 +23,5 @@ jobs:
           environment-file: environment.yml
           use-only-tar-bz2: true
           use-mamba: true
-    - shell: bash -el {0}
     - name: run-tests
       run: make test
