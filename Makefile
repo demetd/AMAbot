@@ -1,6 +1,7 @@
 SHELL=/bin/bash
 
-MAMBA_EXE := $(shell which mamba)
+# Set MAMBA_EXE to either the environment variable MAMBA_EXE or the path to the mamba executable
+MAMBA_EXE := $(or $(MAMBA_EXE),$(shell which mamba))
 ifeq ($(MAMBA_EXE),)
 	CONDA_PATH := $(HOME)/miniconda3
 	MAMBA_EXE := $(CONDA_PATH)/bin/conda
