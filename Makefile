@@ -8,7 +8,6 @@ ifeq ($(MAMBA_EXE),)
 else
 	CONDA_PATH := $(shell dirname $(dir $(MAMBA_EXE)))
 endif
-/usr/share/miniconda/bin/activate
 
 CONDA_ENV_PATH := ./env
 CONDA_ACTIVATE := source $(CONDA_PATH)/bin/activate $(CONDA_ENV_PATH)
