@@ -21,4 +21,5 @@ jobs:
           channel-priority: true
           activate-environment: env
           environment-file: environment.yml
-
+    - name: run-tests
+      run: make test

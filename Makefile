@@ -10,7 +10,7 @@ else
 endif
 
 CONDA_ENV_PATH := ./env
-CONDA_ACTIVATE := source $(CONDA_PATH)/bin/activate $(CONDA_ENV_PATH)
+CONDA_ACTIVATE := $(if $(CI),conda activate env,source $(CONDA_PATH)/bin/activate $(CONDA_ENV_PATH))
 CONDA_DEACTIVATE := source $(CONDA_PATH)/bin/deactivate $(CONDA_ENV_PATH)
 PYTHONPATH := PYTHONPATH=./:$$PYTHONPATH
 
@@ -43,10 +43,10 @@ clean-env:
 	fi
 
 
-test: build
+test: $(if $(CI),,$(MAKE) build)
 	$(CONDA_ACTIVATE) && $(PYTHONPATH) pytest -v 
 
-pre-commit: build
+pre-commit: $(if $(CI),,$(MAKE) build)
 	$(CONDA_ACTIVATE) && $(PYTHONPATH) pre-commit run --all-files
 
 check: test pre-commit
