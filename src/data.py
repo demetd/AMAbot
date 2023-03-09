@@ -1,14 +1,15 @@
-"""Get data from the database"""
+"""Get data from the database."""
+
 
 def print_name(name):
     """
-    Print the name of the person
+    Print the name of the person.
 
     Parameters
     ----------
     name : str
         The name of the person
-    
+
     Returns
     -------
     name : str

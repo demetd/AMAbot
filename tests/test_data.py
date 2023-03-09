@@ -3,4 +3,4 @@
 
 def test_print_name():
     """Test print_name function."""
-    assert "John" == "John"
+    assert len('John') == 4
