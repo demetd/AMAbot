@@ -1,0 +1,20 @@
+repos:
+- repo: local
+  hooks:
+   - id: pycodestyle
+     name: pycodestyle
+     entry: pycodestyle --max-line-length=120
+     language: system
+     files: \.py$
+     exclude: ^archived/
+   - id: pydocstyle
+     name: pydocstyle
+     entry: pydocstyle --convention=numpy
+     language: system
+     files: \.py$
+     exclude: (__init__.py)|(tests/.*test_.*py)
+   - id: pylint
+     name: pylint
+     entry: pylint
+     language: system
+     files: \.py$
